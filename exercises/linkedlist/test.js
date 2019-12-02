@@ -270,9 +270,20 @@ describe('InsertAt', () => {
     expect(l.getAt(1).data).toEqual('b');
     expect(l.getAt(2).data).toEqual('hi');
   });
+
+  test('insert a new node when index is negative, or out of bounds', () => {
+    const l = new List();
+    l.insertAt(20, -1); // failed
+    l.insertAt('10', 1); // failed
+    expect(l.length).toEqual(0);
+
+    l.insertAt(5, 0); // success
+    expect(l.getAt(0).data).toEqual(5);
+    expect(l.length).toEqual(1);
+  });
 });
 
-describe.skip('ForEach', () => {
+describe('ForEach', () => {
   test('applies a transform to each node', () => {
     const l = new List();
 
@@ -281,18 +292,23 @@ describe.skip('ForEach', () => {
     l.insertLast(3);
     l.insertLast(4);
 
-    l.forEach(node => {
+    let count = 0;
+
+    l.forEach((node, index) => {
       node.data += 10;
+      count += index;
     });
 
+    expect(count).toEqual(6);
     expect(l.getAt(0).data).toEqual(11);
     expect(l.getAt(1).data).toEqual(12);
     expect(l.getAt(2).data).toEqual(13);
     expect(l.getAt(3).data).toEqual(14);
+
   });
 });
 
-describe.skip('for...of loops', () => {
+describe('for...of loops', () => {
   test('works with the linked list', () => {
     const l = new List();
 

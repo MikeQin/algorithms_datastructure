@@ -125,6 +125,16 @@ class LinkedList {
       return;
     }
 
+    if (index === 0) {
+      this.head = this.head.next;
+      this.length--;
+      return;
+    }
+
+    const prev = this.getAt(index - 1);
+    prev.next = prev.next.next;
+
+    /*
     let prev = null;
     if ((index - 1) >= 0) {
       prev = this.getAt(index - 1);
@@ -149,31 +159,69 @@ class LinkedList {
     else { // only node
       this.head = null;
     }
+    */
 
     this.length--;
   }
 
   insertAt(data, index) {
 
+    if (index < 0) {
+      return;
+    }
+
+    if (!this.head && index > 0) {
+      return;
+    }
+
     const node = new Node(data);
 
-    if (!this.head) {
+    if (!this.head && index === 0) {
       this.head = node;
+      this.length++;
+      return;
     }
 
     if (index === 0) {
       node.next = this.head;
       this.head = node;
+      this.length++;
       return;
     }
 
-    const prev = this.getAt(index - 1) || this.getLast();
+    const prev = this.getAt(index - 1) || this.getLast(); // if index is too big
     node.next = prev.next;
     prev.next = node;
 
     this.length++;
   }
 
+  forEach(fn) {
+    if (!this.head) {
+      return;
+    }
+
+    let counter = 0;
+    let node = this.head;
+    while (node) {
+      fn(node, counter);
+      node = node.next;
+      counter++;
+    }
+  }
+
+  *[Symbol.iterator]() {
+
+    let node = this.head;
+    while (node) {
+      yield node;
+      node = node.next;
+    }
+  }
+
+  /**
+   * Custom Implementation Below
+   */
   reverse() {
 
     if (!this.head) {
@@ -191,14 +239,6 @@ class LinkedList {
       node = stack.pop();
       this.head = node;
     }
-
-    // for (let i = stack.length; i > 0; i--) {
-    //   node.next = stack.pop();
-    //   node = node.next;
-    //   if (i === 1) {
-    //     node.next = null;
-    //   }
-    // }
 
     let counter = stack.length;
     while (counter > 0) {
@@ -232,15 +272,15 @@ class LinkedList {
   }
 }
 
-var list = new LinkedList();
-list.insertLast(1);
-list.insertLast(2);
-list.insertLast(3);
-//list.insertLast(0);
-//list.insertLast(4);
-list.print();
-list.reverse();
-list.print();
-console.log(list);
+// var list = new LinkedList();
+// list.insertLast(1);
+// list.insertLast(2);
+// list.insertLast(3);
+// list.insertLast(0);
+// list.insertLast(4);
+// list.print();
+// list.reverse();
+// list.print();
+// console.log(list);
 
 module.exports = { Node, LinkedList };
