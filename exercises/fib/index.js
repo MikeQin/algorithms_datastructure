@@ -10,7 +10,7 @@
 
 function memoize(fn) {
   const cache = {};
-  return function(n) {
+  return function (n) {
     if (cache[n]) {
       return cache[n];
     }
@@ -44,14 +44,14 @@ function memoize(fn) {
 //     return result;
 //   }
 // }
-function slowFib(n) {
+function fib(n) {
   if (n < 2) {
     return n;
   }
 
-  return fib(n-1) + fib(n-2);
+  return fib(n - 1) + fib(n - 2);
 }
 
-const fib = memoize(slowFib);
+const memoizeFib = memoize(fib);
 
-module.exports = fib;
+module.exports = memoizeFib;
